@@ -14,7 +14,7 @@ This Python script performs technical analysis on cryptocurrencies using data fr
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/praxxley/crypto.py.git
+git remote add origin https://github.com/praxxley-tech/crypto.git
 git branch -M main
 git push -uf origin main
 ```
