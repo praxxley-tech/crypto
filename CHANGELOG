@@ -1,0 +1,15 @@
+# Changelog
+
+## 1. Initialer Code
+- Grundlegende Implementierung von Funktionen zum Abrufen und Analysieren von Kryptowährungsdaten von CoinGecko API.
+- Verwendung von technischen Indikatoren aus der `ta` Bibliothek, um den historischen Daten von Kryptowährungen technische Analyse hinzuzufügen.
+- Funktionen zum Speichern und Laden von analysierten Daten in CSV-Dateien.
+- Hauptskript, um durch alle Kryptowährungen zu iterieren und Investment-worthy cryptocurrencies basierend auf RSI und MACD zu finden.
+
+## 2. tqdm hinzugefügt
+- Integration von `tqdm` zur Visualisierung des Fortschritts bei der Analyse von Kryptowährungen.
+
+## 3. Anpassung des RSI-Schwellenwerts
+- Funktion `get_rsi_threshold()` hinzugefügt, um den RSI-Schwellenwert vom Benutzer abzufragen.
+- Anpassung der `is_investment_worthy()` Funktion, um den RSI-Schwellenwert als Parameter zu akzeptieren.
+- Hinzufügen einer Benutzerabfrage, um den RSI-Schwellenwert zu erhöhen, wenn keine Investment-worthy cryptocurrencies gefunden werden.
