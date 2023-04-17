@@ -18,6 +18,35 @@ def save_data_to_csv(data, filename):
 def load_data_from_csv(filename):
     return pd.read_csv(filename)
 
+# Funktion zum Speichern von Krypto-Informationen in einer CSV-Datei
+def save_crypto_info_to_csv(crypto_data, filename):
+    data = pd.DataFrame(crypto_data)
+    save_data_to_csv(data, filename)
+
+# Funktion zum Laden von Krypto-Informationen aus einer CSV-Datei
+def load_crypto_info_from_csv(filename):
+    data = load_data_from_csv(filename)
+    return data.to_dict("records")
+
+# Funktion zum Speichern von historischen Daten in einer CSV-Datei
+def save_historical_data_to_csv(data, coin_id, filename):
+    data.to_csv(filename.format(coin_id), index=False)
+
+# Funktion zum Laden von historischen Daten aus einer CSV-Datei
+def load_historical_data_from_csv(coin_id, filename):
+    return pd.read_csv(filename.format(coin_id))
+def get_script_directory():
+    return os.path.dirname(os.path.abspath(__file__))
+
+def get_csv_path(filename):
+    return os.path.join(get_script_directory(), filename)
+
+def save_data_to_csv(data, filename):
+    data.to_csv(filename, index=False)
+
+def load_data_from_csv(filename):
+    return pd.read_csv(filename)
+
 csv_path = get_csv_path("investment_worthy_crypto.csv")
 if os.path.exists(csv_path):
     investment_worthy_crypto = load_data_from_csv(csv_path).to_dict("records")
@@ -25,6 +54,9 @@ else:
     investment_worthy_crypto = []
 
 def get_all_crypto_data():
+    csv_path = get_csv_path("all_crypto_info.csv")
+    if os.path.exists(csv_path):
+        return load_crypto_info_from_csv(csv_path)
     url = "https://api.coingecko.com/api/v3/coins/list"
     response = requests.get(url)
     data = response.json()
@@ -40,9 +72,13 @@ def get_all_crypto_data():
         except TypeError:
             continue
 
+    save_crypto_info_to_csv(crypto_data, csv_path)
     return crypto_data
 
 def get_historical_data(coin_id, days=180):
+    csv_path = get_csv_path("historical_data_{}.csv")
+    if os.path.exists(csv_path.format(coin_id)):
+        return load_historical_data_from_csv(coin_id, csv_path)
     url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart?vs_currency=usd&days={days}&interval=daily"
     response = requests.get(url)
     data = response.json()
@@ -55,6 +91,7 @@ def get_historical_data(coin_id, days=180):
 
     df = pd.DataFrame({"timestamp": timestamps, "price": price_data})
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
+    save_historical_data_to_csv(df, coin_id, csv_path)
     return df
 
 def calculate_technical_indicators(dataframe):
